@@ -10,4 +10,11 @@
     <PackageReference Include="Unity" Version="5.8.6" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="data\" />
+    <Folder Include="resources\database\" />
+    <Folder Include="resources\datatype\" />
+    <Folder Include="resources\extensions\" />
+  </ItemGroup>
+
 </Project>

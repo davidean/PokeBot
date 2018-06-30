@@ -43,7 +43,7 @@ namespace PokeBot
 
 
             string token = "";
-            using (var stream = new FileStream(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location).Replace(@"bin\Debug\netcoreapp2.0", @"Data\Token.txt"), FileMode.Open, FileAccess.Read))
+            using (var stream = new FileStream(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location).Replace(@"bin\Debug\netcoreapp2.0", @"txt\Token.txt"), FileMode.Open, FileAccess.Read))
             using (var ReadToken = new StreamReader(stream))
             {
                 token = ReadToken.ReadToEnd();
@@ -64,17 +64,47 @@ namespace PokeBot
 
         private async Task client_ready()
         {
-            await client.SetGameAsync("p.help for help");
+            await client.SetGameAsync("po!help for help");
         }
 
-        private async Task client_messageRecieved(SocketMessage arg)
+        private async Task client_messageRecieved(SocketMessage MessageParam)
         {
             //configure commands here.
+            var message = MessageParam as SocketUserMessage;
+            var context = new SocketCommandContext(client, message);
+
+            if(context.Message == null || context.Message.Content == "")
+            {
+                return;
+            }
+
+            if (context.User.IsBot)
+            {
+                return;
+            }
+
+
+            int argspos = 0;
+            if (!(message.HasStringPrefix("po!", ref argspos) || message.HasMentionPrefix(client.CurrentUser, ref argspos))) 
+            {
+                return;
+            }
+
+            var result = await command.ExecuteAsync(context, argspos);
+
+            if (!result.IsSuccess)
+            {
+                Console.WriteLine("Something went wrong!!!!");
+            }
+
+
         }
-    }
 
 
-    }
+        }
+}
+
+
 
 
 
